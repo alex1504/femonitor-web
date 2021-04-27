@@ -1,0 +1,113 @@
+{
+  "name": "femonitor",
+  "version": "1.0.0",
+  "description": "SDK for frontend error and performance observe",
+  "author": {
+    "name": "alex1504"
+  },
+  "license": "MIT",
+  "main": "dist/index.umd.js",
+  "types": "dist/src/index.d.ts",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "keywords": [
+    "error",
+    "performance",
+    "monitor",
+    "sdk"
+  ],
+  "scripts": {
+    "clean": "shx rm -rf dist coverage .rpt2_cache",
+    "dev": "cross-env NODE_ENV=development DEBUG=1 jest",
+    "watch": "cross-env NODE_ENV=production EXTERNAL=1 rollup -c --watch -f umd -o dist/index.umd.js",
+    "build": "npm run lint && npm run clean && npm run build:esm && npm run build:umd && npm run build:min",
+    "build:esm": "cross-env NODE_ENV=production EXTERNAL=1 rollup -c -f esm -o dist/index.js",
+    "build:umd": "cross-env NODE_ENV=production rollup -c -f umd -o dist/index.umd.js",
+    "build:min": "cross-env NODE_ENV=production MINIFY=1 rollup -c -f umd -o dist/index.min.js",
+    "lint": "eslint \"src/**/*\" \"test/**/*\"",
+    "lint:fix": "eslint --fix \"src/**/*\" \"test/**/*\"",
+    "test": "cross-env NODE_ENV=test jest"
+  },
+  "dependencies": {
+    "deepcopy": "^2.1.0",
+    "deepmerge": "^4.2.2",
+    "error-stack-parser": "^2.0.6",
+    "events": "^3.3.0",
+    "json-stringify-safe": "^5.0.1",
+    "mobile-detect": "^1.4.5",
+    "query-string": "^7.0.0",
+    "rrweb": "^0.9.14",
+    "tslib": "^2.2.0",
+    "vue": "^2.6.12"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.11.6",
+    "@babel/eslint-parser": "^7.11.5",
+    "@babel/preset-env": "^7.11.5",
+    "@babel/preset-typescript": "^7.10.4",
+    "@commitlint/cli": "^9.1.2",
+    "@commitlint/config-conventional": "^9.1.2",
+    "@koa/cors": "^3.1.0",
+    "@rollup/plugin-babel": "^5.2.0",
+    "@rollup/plugin-commonjs": "^15.0.0",
+    "@rollup/plugin-json": "^4.1.0",
+    "@rollup/plugin-node-resolve": "^9.0.0",
+    "@rollup/plugin-replace": "^2.3.3",
+    "@types/assert": "^1.5.1",
+    "@types/jest": "^26.0.13",
+    "@types/json-stringify-safe": "^5.0.0",
+    "@types/koa": "^2.13.1",
+    "@types/koa-router": "^7.4.2",
+    "@types/koa-static": "^4.0.1",
+    "@types/koa__cors": "^3.0.2",
+    "@types/wechat-miniprogram": "^3.1.0",
+    "@typescript-eslint/eslint-plugin": "^4.1.0",
+    "@typescript-eslint/parser": "^4.1.0",
+    "babel-eslint": "^10.1.0",
+    "cross-env": "^7.0.2",
+    "eslint": "^7.8.1",
+    "eslint-config-airbnb": "^18.2.0",
+    "eslint-plugin-import": "^2.22.0",
+    "eslint-plugin-jsx-a11y": "^6.3.1",
+    "eslint-plugin-react": "^7.20.6",
+    "fs-extra": "^9.0.1",
+    "husky": "^4.2.5",
+    "istanbul-instrumenter-loader": "^3.0.1",
+    "jest": "^26.4.2",
+    "jest-fetch-mock": "^3.0.3",
+    "koa": "^2.13.1",
+    "koa-router": "^10.0.0",
+    "koa-static": "^5.0.0",
+    "koa-views": "^7.0.1",
+    "nodemon": "^2.0.7",
+    "power-assert": "^1.6.1",
+    "rollup": "^2.26.5",
+    "rollup-plugin-terser": "^7.0.0",
+    "rollup-plugin-typescript2": "^0.27.2",
+    "shx": "^0.3.2",
+    "ts-jest": "^26.3.0",
+    "ts-loader": "^8.0.3",
+    "ts-node": "^9.1.1",
+    "typescript": "^4.0.2",
+    "webpack": "^4.44.1",
+    "webpack-espower-loader": "^2.0.0"
+  },
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -e .git/COMMIT_EDITMSG",
+      "pre-commit": "npm run lint"
+    }
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ],
+    "rules": {
+      "subject-case": [
+        0
+      ]
+    }
+  }
+}
