@@ -22,6 +22,7 @@
     "clean": "shx rm -rf dist coverage .rpt2_cache",
     "dev": "cross-env NODE_ENV=development DEBUG=1 jest",
     "watch": "cross-env NODE_ENV=production EXTERNAL=1 rollup -c --watch -f umd -o dist/index.umd.js",
+    "server": "nodemon --watch server --exec \"ts-node\" ./server/app.ts",
     "build": "npm run lint && npm run clean && npm run build:esm && npm run build:umd && npm run build:min",
     "build:esm": "cross-env NODE_ENV=production EXTERNAL=1 rollup -c -f esm -o dist/index.js",
     "build:umd": "cross-env NODE_ENV=production rollup -c -f umd -o dist/index.umd.js",
