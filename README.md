@@ -1,6 +1,14 @@
 # Description
+A SDK for web error and performance monitor using event subscription
 
-A SDK for web error and performance monitor.
+# Feature
+- [x] Error observe, includes js error, unhandle rejection error, http error and resource error
+- [x] Error sampling, support errors collection emit events for report optimization 
+- [x] Observe page performance
+- [x] Observe user behaviors, includes console, user click event
+- [x] Integrate rrweb
+- [x] Hack spa router change
+- [x] Auto report
 
 # Development
 
@@ -25,7 +33,7 @@ npm run test
 
 ## CDN
 
-```
+```html
 <script src="https://cdn.jsdelivr.net/npm/femonitor-web@latest/dist/index.min.js"></script>
 ```
 
@@ -39,17 +47,20 @@ npm i femonitor-web -S
 
 ## Minimal options
 
-```javascript
+```js
 import { WebMonitor } from "femonitor-web";
 const monitor = Monitor.init();
-monitor.on([event], () => {});
+/* Listen single event */
+monitor.on([event], (emitData) => {});
+/* Or Listen all event */
+monitor.on("event", (eventName, emitData) => {})
 ```
 
 ## Full options
 
-```
+```typescript
 // Default full options
-const defaultTrackerOptions = {
+export const defaultTrackerOptions = {
   env: 'dev',
   reportUrl: "",
   data: {},
@@ -96,7 +107,7 @@ monitor.useVueErrorListener(Vue)
 
 React supply a hook called `componentDidCatch` for error listen and concept called ErrorBoundary which is enabled to catch errors at top and prevent app to shutdown. You can report it by yourself like below.
 
-```
+```js
 class ErrorBoundary extends React.Component {
   constructor(props) {
     super(props);
@@ -130,3 +141,5 @@ class ErrorBoundary extends React.Component {
 | reqStart             | Network request start                                                   |
 | reqEnd               | Network request end                                                     |
 | performanceInfoReady | Performance data is ready                                               |
+| event                | Includes all events above                                               |
+
