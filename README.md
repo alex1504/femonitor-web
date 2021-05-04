@@ -1,6 +1,6 @@
 # Description
 
-A sdk for web error and performance monitor.
+A SDK for web error and performance monitor.
 
 # Development
 
@@ -26,7 +26,7 @@ npm run test
 ## CDN
 
 ```
-<script src="https://cdn.jsdelivr.net/npm/femonitor-web@latest/bin/femonitor-web.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/femonitor-web@latest/dist/index.min.js"></script>
 ```
 
 ## NPM
