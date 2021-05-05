@@ -1,9 +1,13 @@
 {
   "name": "femonitor-web",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A web SDK for frontend error and performance monnitor",
   "author": {
     "name": "alex1504"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/alex1504/femonitor-web"
   },
   "license": "MIT",
   "main": "dist/index.umd.js",
