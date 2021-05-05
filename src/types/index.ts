@@ -1,4 +1,5 @@
 export enum TrackerEvents {
+  /* SDK expose events */
   performanceInfoReady = "performanceInfoReady",
   reqStart = "reqStart",
   reqEnd = "reqEnd",
@@ -9,6 +10,9 @@ export enum TrackerEvents {
   resourceError = "resourceError",
   batchErrors = "batchErrors",
   mouseTrack = "mouseTrack",
+  event = "event",
+
+  /* SDK inner events */
   _clickEle = "_clickEle",
   _console = "_console",
   _onConsoleTrack = "_onConsoleTrack",

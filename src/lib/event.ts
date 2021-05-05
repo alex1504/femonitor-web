@@ -1,4 +1,5 @@
 import { EventEmitter } from "events";
+import { TrackerEvents } from "../types";
 import { isObject, getPageUrl, getUvLabel, getUserSessionLabel } from "./util";
 
 export class MyEmitter extends EventEmitter {
@@ -21,6 +22,7 @@ export class MyEmitter extends EventEmitter {
       Reflect.deleteProperty(data, "beforeEmit");
     }
 
+    super.emit(TrackerEvents.event, event, data, ...rest)
     return super.emit(event, data, ...rest);
   }
 
