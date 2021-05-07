@@ -1,3 +1,9 @@
+# Example
+
+Online example: http://monitor.huzerui.com
+
+Open chrome developer tool to see console information
+
 # Description
 
 A SDK for web error and performance monitor using event subscription
@@ -16,7 +22,7 @@ A SDK for web error and performance monitor using event subscription
 
 ```
 npm run watch  // Watch tsfile change and compile by rollup
-npm run server // Start a nodejs test server 
+npm run server // Start a nodejs test server
 ```
 
 Then visit `localhost:3000` for example test
