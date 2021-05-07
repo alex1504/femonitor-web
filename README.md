@@ -1,9 +1,11 @@
 # Description
+
 A SDK for web error and performance monitor using event subscription
 
 # Feature
+
 - [x] Error observe, includes js error, unhandle rejection error, http error and resource error
-- [x] Error sampling, support errors collection emit events for report optimization 
+- [x] Error sampling, support errors collection emit events for report optimization
 - [x] Observe page performance
 - [x] Observe user behaviors, includes console, user click event
 - [x] Integrate rrweb
@@ -14,8 +16,10 @@ A SDK for web error and performance monitor using event subscription
 
 ```
 npm run watch  // Watch tsfile change and compile by rollup
-npm run server // Start a nodejs server for request test
+npm run server // Start a nodejs test server 
 ```
+
+Then visit `localhost:3000` for example test
 
 # Build
 
@@ -53,7 +57,7 @@ const monitor = Monitor.init();
 /* Listen single event */
 monitor.on([event], (emitData) => {});
 /* Or Listen all event */
-monitor.on("event", (eventName, emitData) => {})
+monitor.on("event", (eventName, emitData) => {});
 ```
 
 ## Full options
@@ -61,25 +65,25 @@ monitor.on("event", (eventName, emitData) => {})
 ```typescript
 // Default full options
 export const defaultTrackerOptions = {
-  env: 'dev',
+  env: "dev",
   reportUrl: "",
   data: {},
   error: {
-    watch: true,  // If listen all error
-    random: 1,    // Sampling rate from 0 to 1, 1 means emit all error
-    repeat: 5,    // Don't emit sample error events when exceed 5 times
-    delay: 1000   // Delay emit event after 1000 ms
+    watch: true, // If listen all error
+    random: 1, // Sampling rate from 0 to 1, 1 means emit all error
+    repeat: 5, // Don't emit sample error events when exceed 5 times
+    delay: 1000 // Delay emit event after 1000 ms
   },
-  performance: false,  // If want to collect performance data
+  performance: false, // If want to collect performance data
   http: {
-    fetch: true,  // If listen request use fetch interface
-    ajax: true    // If listen ajax request
+    fetch: true, // If listen request use fetch interface
+    ajax: true // If listen ajax request
   },
   behavior: {
     watch: false,
     console: [ConsoleType.error],
-    click: true,     // If set to true will listen all dom click event
-    queueLimit: 20   // Limit behavior queue to 20
+    click: true, // If set to true will listen all dom click event
+    queueLimit: 20 // Limit behavior queue to 20
   },
   /**
    * rrweb use mutation observer api, for compatibility see:
@@ -87,10 +91,10 @@ export const defaultTrackerOptions = {
    */
   rrweb: {
     watch: false,
-    queueLimit: 50,  // Limit rrweb queue to 20
-    delay: 1000      // Emit event after 1000 ms
+    queueLimit: 50, // Limit rrweb queue to 20
+    delay: 1000 // Emit event after 1000 ms
   },
-  isSpa: true        // If watch is true, globalData can get _spaUrl for report when route change
+  isSpa: true // If watch is true, globalData can get _spaUrl for report when route change
 };
 const monitor = Monitor.init(defaultTrackerOptions);
 ```
@@ -142,4 +146,3 @@ class ErrorBoundary extends React.Component {
 | reqEnd               | Network request end                                                     |
 | performanceInfoReady | Performance data is ready                                               |
 | event                | Includes all events above                                               |
-
