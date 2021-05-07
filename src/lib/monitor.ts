@@ -284,7 +284,7 @@ export class WebMonitor {
       this.rrwebQueue.push(event);
 
       setTimeout(() => {
-        myEmitter.emit(TrackerEvents.mouseTrack, this.rrwebQueue);
+        myEmitter.customEmit(TrackerEvents.mouseTrack, this.rrwebQueue);
       }, this.$options.rrweb.delay);
     });
   }

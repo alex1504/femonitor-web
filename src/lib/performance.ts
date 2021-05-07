@@ -80,7 +80,7 @@ export class PerformanceObserver {
       fcpTime
     };
 
-    myEmitter.emit(TrackerEvents.performanceInfoReady, performanceInfo);
+    myEmitter.customEmit(TrackerEvents.performanceInfoReady, performanceInfo);
   }
 
   init(): void {
