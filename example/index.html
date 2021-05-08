@@ -66,13 +66,13 @@
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue-router@3.0.3/dist/vue-router.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/element-ui@2.13.2/lib/index.js"></script>
-    <script src="http://localhost:3000/dist/index.umd.js"></script>
+    <script src="/dist/index.umd.js"></script>
 
     <script>
       const isRRweb = localStorage.getItem("rrweb") ? true : false;
       const isPerformance = localStorage.getItem("performance") ? true : false;
       const monitor = FeMonitor.WebMonitor.init({
-        reportUrl: "http://localhost:3000/reportUrl",
+        reportUrl: "/api/reportUrl",
         rrweb: {
           watch: isRRweb
         },
@@ -123,30 +123,30 @@
           onAjax500Error() {
             const xhr = new XMLHttpRequest();
             xhr.withCredentials = true;
-            xhr.open("get", "http://localhost:3000/500", true);
+            xhr.open("get", "/api/500", true);
             xhr.send();
           },
           onAjaxSuccess() {
             const xhr = new XMLHttpRequest();
-            xhr.open("get", "http://localhost:3000/success", true);
+            xhr.open("get", "/api/success", true);
             xhr.send();
           },
           onAjax404Error() {
             const xhr = new XMLHttpRequest();
             xhr.withCredentials = true;
-            xhr.open("get", "http://localhost:3000/404", true);
+            xhr.open("get", "/api/404", true);
             xhr.send();
           },
           onAjaxTimeoutError() {
             const xhr = new XMLHttpRequest();
             xhr.withCredentials = true;
             xhr.timeout = 30;
-            xhr.open("get", "http://localhost:3000/timeout", true);
+            xhr.open("get", "/api/timeout", true);
             xhr.send();
           },
           onLoadJsError() {
             const script = document.createElement("script");
-            script.setAttribute("src", "http://localhost:3000/js/undefined.js");
+            script.setAttribute("src", "/js/undefined.js");
             document.body.appendChild(script);
           },
           onLoadCssError() {
@@ -154,7 +154,7 @@
             link.setAttribute("rel", "stylesheet");
             link.setAttribute(
               "href",
-              "http://localhost:3000/css/undefined.css"
+              "/css/undefined.css"
             );
             document.head.appendChild(link);
           },
@@ -162,18 +162,18 @@
             const image = document.createElement("img");
             image.setAttribute(
               "src",
-              "http://localhost:3000/img/undefined.png"
+              "/img/undefined.png"
             );
             document.body.appendChild(image);
           },
           onFetchSuccess() {
-            fetch("http://localhost:3000/success");
+            fetch("/api/success");
           },
           onFetch404Error() {
-            fetch("http://localhost:3000/404");
+            fetch("/api/404");
           },
           onFetch500Error() {
-            fetch("http://localhost:3000/500");
+            fetch("/api/500");
           },
           onPromiseError() {
             new Promise((resolve, reject) => {

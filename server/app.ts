@@ -18,23 +18,23 @@ app.use(
   })
 );
 
-router.post("/reportUrl", async (ctx) => {
+router.post("/api/reportUrl", async (ctx) => {
   ctx.body = "success";
 });
 
-router.get("/404", async (ctx) => {
+router.get("/api/404", async (ctx) => {
   ctx.status = 404;
 });
 
-router.get("/500", async (ctx) => {
+router.get("/api/500", async (ctx) => {
   ctx.status = 500;
 });
 
-router.get("/timeout", async () => {
+router.get("/api/timeout", async () => {
   await sleep(50000);
 });
 
-router.get("/success", async (ctx) => {
+router.get("/api/success", async (ctx) => {
   ctx.body = "success";
 });
 
