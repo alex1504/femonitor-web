@@ -31,6 +31,12 @@
           <el-button onClick="onJsError()">test</el-button>
         </div>
 
+        <h2>batchErrors</h2>
+        <p>This event will combine errors to emit together in a while time (could be config), default is 1 second</p>
+        <div>
+          <el-button onClick="onJsError()">Hit this button fast</el-button>
+        </div>
+
         <h2>VuejsError</h2>
         <component-a></component-a>
 
@@ -72,7 +78,9 @@
       const isRRweb = localStorage.getItem("rrweb") ? true : false;
       const isPerformance = localStorage.getItem("performance") ? true : false;
       const monitor = FeMonitor.WebMonitor.init({
-        reportUrl: "/api/reportUrl",
+        error: {
+          repeat: 10000
+        },
         rrweb: {
           watch: isRRweb
         },
@@ -152,18 +160,12 @@
           onLoadCssError() {
             const link = document.createElement("link");
             link.setAttribute("rel", "stylesheet");
-            link.setAttribute(
-              "href",
-              "/css/undefined.css"
-            );
+            link.setAttribute("href", "/css/undefined.css");
             document.head.appendChild(link);
           },
           onLoadImageError() {
             const image = document.createElement("img");
-            image.setAttribute(
-              "src",
-              "/img/undefined.png"
-            );
+            image.setAttribute("src", "/img/undefined.png");
             document.body.appendChild(image);
           },
           onFetchSuccess() {
