@@ -1,12 +1,15 @@
+# Description
+
+A SDK for web error and performance monitor using event subscription
+
+# Screenshot
+![screenshot](https://cdn.jsdelivr.net/gh/sandy1504/media@master/20210407/screenshot.6l0t3bpqubw0.gif)
+
 # Example
 
 Online example: http://monitor.huzerui.com
 
 Open chrome developer tool to see console information
-
-# Description
-
-A SDK for web error and performance monitor using event subscription
 
 # Feature
 
