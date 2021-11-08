@@ -88,7 +88,12 @@ export class ErrorObserver {
           target instanceof HTMLImageElement;
         if (!isElementTarget) return false;
 
-        const url = target.src || target.href;
+        let url: string;
+        if (target instanceof HTMLLinkElement) {
+          url = target.href;
+        } else {
+          url = target.src;
+        }
 
         const errorObj: BaseError = {
           url,

@@ -53,7 +53,7 @@ export class VueErrorObserver {
           myEmitter.customEmit(TrackerEvents.vuejsError, errorObj);
         }
       } catch (error) {
-        throw new Error(error);
+        throw new Error(typeof error === "string" ? error : "");
       }
     };
   }
@@ -83,7 +83,7 @@ export class VueErrorObserver {
           : "")
       );
     } catch (error) {
-      throw new Error(error);
+      throw new Error(typeof error === "string" ? error : "");
     }
   }
 }

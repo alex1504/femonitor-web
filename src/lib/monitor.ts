@@ -377,7 +377,7 @@ export class WebMonitor {
   private handleErrorReport(): void {
     if (this.errorQueueTimer) return;
 
-    this.errorQueueTimer = setTimeout(() => {
+    this.errorQueueTimer = window.setTimeout(() => {
       if (this.$options.reportUrl) {
         this.reporter.reportErrors(this.errorQueue);
       }
