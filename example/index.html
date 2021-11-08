@@ -1,195 +1,215 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>femonitor-web-example</title>
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/element-ui@2.13.2/lib/theme-chalk/index.css"
-    />
-  </head>
 
-  <body>
-    <div id="app">
-      <section>
-        <h2>setting（Need to refresh page）</h2>
-        <div>
-          <el-form ref="form" :model="setting" label-width="200px">
-            <el-form-item label="rrweb switch">
-              <el-switch v-model="setting.rrweb"></el-switch>
-            </el-form-item>
-            <el-form-item label="performance switch">
-              <el-switch v-model="setting.performance"></el-switch>
-            </el-form-item>
-          </el-form>
-        </div>
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>femonitor-web-example</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/element-ui@2.13.2/lib/theme-chalk/index.css" />
+</head>
 
-        <h2>jsError</h2>
-        <div>
-          <el-button onClick="onJsError()">test</el-button>
-        </div>
+<body>
+  <div id="app">
+    <section>
+      <h2>setting（Need to refresh page）</h2>
+      <div>
+        <el-form ref="form" :model="setting" label-width="200px">
+          <el-form-item label="rrweb switch">
+            <el-switch v-model="setting.rrweb"></el-switch>
+          </el-form-item>
+          <el-form-item label="performance switch">
+            <el-switch v-model="setting.performance"></el-switch>
+          </el-form-item>
+        </el-form>
+      </div>
 
-        <h2>batchErrors</h2>
-        <p>This event will combine errors to emit together in a while time (could be config), default is 1 second</p>
-        <div>
-          <el-button onClick="onJsError()">Hit this button fast</el-button>
-        </div>
+      <h2>jsError</h2>
+      <div>
+        <el-button onClick="onJsError()">test</el-button>
+      </div>
 
-        <h2>VuejsError</h2>
-        <component-a></component-a>
+      <h2>batchErrors</h2>
+      <p>This event will combine errors to emit together in a while time (could be config), default is 1 second</p>
+      <div>
+        <el-button onClick="onJsError()">Hit this button fast</el-button>
+      </div>
 
-        <h2>ajax</h2>
-        <div>
-          <el-button @click="onAjaxSuccess">req success</el-button>
-          <el-button @click="onAjax404Error">req 404</el-button>
-          <el-button @click="onAjax500Error">req 500</el-button>
-          <el-button @click="onAjaxTimeoutError">req timeout</el-button>
-        </div>
+      <h2>VuejsError</h2>
+      <component-a></component-a>
 
-        <h2>fetch</h2>
-        <div>
-          <el-button @click="onFetchSuccess">fetch success</el-button>
-          <el-button @click="onFetch404Error">fetch 404</el-button>
-          <el-button @click="onFetch500Error">fetch 500</el-button>
-        </div>
+      <h2>ajax</h2>
+      <div>
+        <el-button @click="onSyncAjaxSuccess">origin sync req success</el-button>
+        <el-button @click="onAsyncAjaxSuccess">origin async req success</el-button>
+        <el-button @click="onJquerySyncAjaxSuccess">jquery sync req success</el-button>
+        <el-button @click="onJqueryAsyncAjaxSuccess">jquery async req success</el-button>
+        <el-button @click="onAjax404Error">req 404</el-button>
+        <el-button @click="onAjax500Error">req 500</el-button>
+        <el-button @click="onAjaxTimeoutError">req timeout</el-button>
+      </div>
 
-        <h2>promise</h2>
-        <div>
-          <el-button @click="onPromiseError">promise error</el-button>
-        </div>
+      <h2>fetch</h2>
+      <div>
+        <el-button @click="onFetchSuccess">fetch success</el-button>
+        <el-button @click="onFetch404Error">fetch 404</el-button>
+        <el-button @click="onFetch500Error">fetch 500</el-button>
+      </div>
 
-        <h2>resource load</h2>
-        <div>
-          <el-button @click="onLoadJsError">load js error</el-button>
-          <el-button @click="onLoadCssError">load css error</el-button>
-          <el-button @click="onLoadImageError">load image error</el-button>
-        </div>
-      </section>
-    </div>
+      <h2>promise</h2>
+      <div>
+        <el-button @click="onPromiseError">promise error</el-button>
+      </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vue-router@3.0.3/dist/vue-router.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/element-ui@2.13.2/lib/index.js"></script>
-    <script src="/dist/index.umd.js"></script>
+      <h2>resource load</h2>
+      <div>
+        <el-button @click="onLoadJsError">load js error</el-button>
+        <el-button @click="onLoadCssError">load css error</el-button>
+        <el-button @click="onLoadImageError">load image error</el-button>
+      </div>
+    </section>
+  </div>
 
-    <script>
-      const isRRweb = localStorage.getItem("rrweb") ? true : false;
-      const isPerformance = localStorage.getItem("performance") ? true : false;
-      const monitor = FeMonitor.WebMonitor.init({
-        error: {
-          repeat: 10000
-        },
-        rrweb: {
-          watch: isRRweb
-        },
-        performance: isPerformance
-      });
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue-router@3.0.3/dist/vue-router.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/element-ui@2.13.2/lib/index.js"></script>
+  <script src="/dist/index.umd.js"></script>
 
-      monitor.useVueErrorListener(Vue);
-      monitor.on("event", (eventName, emitData) => {
-        console.log(eventName, emitData);
-      });
+  <script>
+    const isRRweb = localStorage.getItem("rrweb") ? true : false;
+    const isPerformance = localStorage.getItem("performance") ? true : false;
+    const monitor = FeMonitor.WebMonitor.init({
+      error: {
+        repeat: 10000
+      },
+      rrweb: {
+        watch: isRRweb
+      },
+      performance: isPerformance
+    });
 
-      Vue.component("component-a", {
-        methods: {
-          onVuejsComponentError() {
-            throw new Error("error");
+    monitor.useVueErrorListener(Vue);
+    monitor.on("event", (eventName, emitData) => {
+      console.log(eventName, emitData);
+    });
+
+    Vue.component("component-a", {
+      methods: {
+        onVuejsComponentError() {
+          throw new Error("error");
+        }
+      },
+      template: `<div> <el-button @click="onVuejsComponentError">test</el-button></div>`
+    });
+
+    new Vue({
+      el: "#app",
+      data() {
+        return {
+          setting: {
+            rrweb: isRRweb,
+            performance: isPerformance
+          }
+        };
+      },
+      watch: {
+        "setting.rrweb"(newVal) {
+          if (newVal) {
+            localStorage.setItem("rrweb", 1);
+          } else {
+            localStorage.removeItem("rrweb");
           }
         },
-        template: `<div> <el-button @click="onVuejsComponentError">test</el-button></div>`
-      });
-
-      new Vue({
-        el: "#app",
-        data() {
-          return {
-            setting: {
-              rrweb: isRRweb,
-              performance: isPerformance
-            }
-          };
-        },
-        watch: {
-          "setting.rrweb"(newVal) {
-            if (newVal) {
-              localStorage.setItem("rrweb", 1);
-            } else {
-              localStorage.removeItem("rrweb");
-            }
-          },
-          "setting.performance"(newVal) {
-            if (newVal) {
-              localStorage.setItem("performance", 1);
-            } else {
-              localStorage.removeItem("performance");
-            }
-          }
-        },
-        methods: {
-          onAjax500Error() {
-            const xhr = new XMLHttpRequest();
-            xhr.withCredentials = true;
-            xhr.open("get", "/api/500", true);
-            xhr.send();
-          },
-          onAjaxSuccess() {
-            const xhr = new XMLHttpRequest();
-            xhr.open("get", "/api/success", true);
-            xhr.send();
-          },
-          onAjax404Error() {
-            const xhr = new XMLHttpRequest();
-            xhr.withCredentials = true;
-            xhr.open("get", "/api/404", true);
-            xhr.send();
-          },
-          onAjaxTimeoutError() {
-            const xhr = new XMLHttpRequest();
-            xhr.withCredentials = true;
-            xhr.timeout = 30;
-            xhr.open("get", "/api/timeout", true);
-            xhr.send();
-          },
-          onLoadJsError() {
-            const script = document.createElement("script");
-            script.setAttribute("src", "/js/undefined.js");
-            document.body.appendChild(script);
-          },
-          onLoadCssError() {
-            const link = document.createElement("link");
-            link.setAttribute("rel", "stylesheet");
-            link.setAttribute("href", "/css/undefined.css");
-            document.head.appendChild(link);
-          },
-          onLoadImageError() {
-            const image = document.createElement("img");
-            image.setAttribute("src", "/img/undefined.png");
-            document.body.appendChild(image);
-          },
-          onFetchSuccess() {
-            fetch("/api/success");
-          },
-          onFetch404Error() {
-            fetch("/api/404");
-          },
-          onFetch500Error() {
-            fetch("/api/500");
-          },
-          onPromiseError() {
-            new Promise((resolve, reject) => {
-              reject("something wrong");
-            });
+        "setting.performance"(newVal) {
+          if (newVal) {
+            localStorage.setItem("performance", 1);
+          } else {
+            localStorage.removeItem("performance");
           }
         }
-      });
-    </script>
-
-    <script>
-      function onJsError() {
-        throw new Error("jsError");
+      },
+      methods: {
+        onAjax500Error() {
+          const xhr = new XMLHttpRequest();
+          xhr.withCredentials = true;
+          xhr.open("get", "/api/500", true);
+          xhr.send();
+        },
+        onSyncAjaxSuccess() {
+          const xhr = new XMLHttpRequest();
+          xhr.open("get", "/api/success", false);
+          xhr.send();
+        },
+        onJquerySyncAjaxSuccess() {
+          $.ajax({
+            url: '/api/success',
+            async: false,
+          })
+        },
+        onAsyncAjaxSuccess() {
+          const xhr = new XMLHttpRequest();
+          xhr.open("get", "/api/success", true);
+          xhr.send();
+        },
+        onJqueryAsyncAjaxSuccess() {
+          $.ajax({
+            url: '/api/success',
+            async: true,
+          })
+        },
+        onAjax404Error() {
+          const xhr = new XMLHttpRequest();
+          xhr.withCredentials = true;
+          xhr.open("get", "/api/404", true);
+          xhr.send();
+        },
+        onAjaxTimeoutError() {
+          const xhr = new XMLHttpRequest();
+          xhr.withCredentials = true;
+          xhr.timeout = 30;
+          xhr.open("get", "/api/timeout", true);
+          xhr.send();
+        },
+        onLoadJsError() {
+          const script = document.createElement("script");
+          script.setAttribute("src", "/js/undefined.js");
+          document.body.appendChild(script);
+        },
+        onLoadCssError() {
+          const link = document.createElement("link");
+          link.setAttribute("rel", "stylesheet");
+          link.setAttribute("href", "/css/undefined.css");
+          document.head.appendChild(link);
+        },
+        onLoadImageError() {
+          const image = document.createElement("img");
+          image.setAttribute("src", "/img/undefined.png");
+          document.body.appendChild(image);
+        },
+        onFetchSuccess() {
+          fetch("/api/success");
+        },
+        onFetch404Error() {
+          fetch("/api/404");
+        },
+        onFetch500Error() {
+          fetch("/api/500");
+        },
+        onPromiseError() {
+          new Promise((resolve, reject) => {
+            reject("something wrong");
+          });
+        }
       }
-    </script>
-  </body>
+    });
+  </script>
+
+  <script>
+    function onJsError() {
+      throw new Error("jsError");
+    }
+  </script>
+</body>
+
 </html>

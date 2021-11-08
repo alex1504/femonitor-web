@@ -25,8 +25,12 @@ export class AjaxInterceptor {
     const { open } = XMLHttpRequest.prototype;
     const { send } = XMLHttpRequest.prototype;
 
-    XMLHttpRequest.prototype.open = function (method: string, url: string) {
-      this._url = url;
+    XMLHttpRequest.prototype.open = function (
+      method: string,
+      url: string | URL,
+      async?: boolean
+    ) {
+      this._url = typeof url === "string" ? url : url.href;
       this._method = method;
 
       const reqStartRes: IAjaxReqStartRes = {
@@ -35,7 +39,12 @@ export class AjaxInterceptor {
 
       myEmitter.customEmit(TrackerEvents.reqStart, reqStartRes);
 
-      return open.call(this, method, url, true);
+      return open.call(
+        this,
+        method,
+        url,
+        typeof async === "boolean" ? async : true
+      );
     };
 
     XMLHttpRequest.prototype.send = function (...rest: any[]) {
