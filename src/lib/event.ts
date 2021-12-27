@@ -10,7 +10,7 @@ export class MyEmitter extends EventEmitter {
     this.init();
   }
 
-  private basicEmit(event: string | symbol, ...args: any[]): boolean {
+  public customEmit(event: string | symbol, ...args: any[]): boolean {
     const [data, ...rest] = args;
 
     if (!isObject(data)) {
@@ -27,9 +27,9 @@ export class MyEmitter extends EventEmitter {
   }
 
   // Emit an event with decorated data
-  public customEmit(event: string | symbol, ...args: any[]): boolean {
+  public emitWithGlobalData(event: string | symbol, ...args: any[]): boolean {
     const [data, ...rest] = args;
-    return this.basicEmit(
+    return this.customEmit(
       event,
       {
         ...data,

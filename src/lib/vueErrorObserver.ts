@@ -42,7 +42,7 @@ export class VueErrorObserver {
             componentNameTrace
           };
 
-          myEmitter.customEmit(TrackerEvents.vuejsError, errorObj);
+          myEmitter.emitWithGlobalData(TrackerEvents.vuejsError, errorObj);
         } else {
           const errorObj: ISimpleVueError = {
             errorType: ErrorType.vueJsError,
@@ -50,7 +50,7 @@ export class VueErrorObserver {
             stackTrace: stringify(stackTrace)
           };
 
-          myEmitter.customEmit(TrackerEvents.vuejsError, errorObj);
+          myEmitter.emitWithGlobalData(TrackerEvents.vuejsError, errorObj);
         }
       } catch (error) {
         throw new Error(typeof error === "string" ? error : "");

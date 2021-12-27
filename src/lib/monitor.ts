@@ -286,7 +286,7 @@ export class Monitor {
       this.rrwebQueue.push(event);
 
       setTimeout(() => {
-        myEmitter.customEmit(TrackerEvents.mouseTrack, this.rrwebQueue);
+        myEmitter.emitWithGlobalData(TrackerEvents.mouseTrack, this.rrwebQueue);
       }, this.$options.rrweb.delay);
     });
   }
@@ -384,7 +384,7 @@ export class Monitor {
         this.reporter.reportErrors(this.errorQueue);
       }
 
-      myEmitter.customEmit(TrackerEvents.batchErrors, {
+      myEmitter.emitWithGlobalData(TrackerEvents.batchErrors, {
         errorList: this.errorQueue
       });
 
@@ -472,7 +472,7 @@ export class Monitor {
   }
 
   emit(event: EventName, ...args: any[]): boolean {
-    return myEmitter.customEmit(event, ...args);
+    return myEmitter.emitWithGlobalData(event, ...args);
   }
 
   useVueErrorListener(Vue: VueConstructor) {

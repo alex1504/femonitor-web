@@ -61,7 +61,7 @@ export class ErrorObserver {
       // Repeated error events emit limit
       const repeat = (self._options.error as IErrorOptions).repeat;
       if (self._cacheError[msgText] < repeat) {
-        myEmitter.customEmit(TrackerEvents.jsError, errorObj);
+        myEmitter.emitWithGlobalData(TrackerEvents.jsError, errorObj);
       }
     };
 
@@ -75,7 +75,7 @@ export class ErrorObserver {
         errorType: ErrorType.unHandleRejectionError,
         context: this
       };
-      myEmitter.customEmit(TrackerEvents.unHandleRejection, errorObj);
+      myEmitter.emitWithGlobalData(TrackerEvents.unHandleRejection, errorObj);
     };
 
     window.addEventListener(
@@ -100,7 +100,7 @@ export class ErrorObserver {
           errorType: ErrorType.resourceError,
           context: this
         };
-        myEmitter.customEmit(TrackerEvents.resourceError, errorObj);
+        myEmitter.emitWithGlobalData(TrackerEvents.resourceError, errorObj);
       },
       true
     );

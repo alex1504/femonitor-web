@@ -38,7 +38,7 @@ export class FetchInterceptor {
             url,
             options
           };
-          myEmitter.customEmit(TrackerEvents.reqStart, reqStartRes);
+          myEmitter.emitWithGlobalData(TrackerEvents.reqStart, reqStartRes);
 
           return originFetch(url, options)
             .then((res) => {
@@ -62,10 +62,10 @@ export class FetchInterceptor {
               };
 
               if (status >= 200 && status < 300) {
-                myEmitter.customEmit(TrackerEvents.reqEnd, reqEndRes);
+                myEmitter.emitWithGlobalData(TrackerEvents.reqEnd, reqEndRes);
               } else {
                 if (this._url !== self._options.reportUrl) {
-                  myEmitter.customEmit(TrackerEvents.reqError, reqErrorRes);
+                  myEmitter.emitWithGlobalData(TrackerEvents.reqError, reqErrorRes);
                 }
               }
 
@@ -81,7 +81,7 @@ export class FetchInterceptor {
               };
 
               if (this._url !== self._options.reportUrl) {
-                myEmitter.customEmit(TrackerEvents.reqError, reqErrorRes);
+                myEmitter.emitWithGlobalData(TrackerEvents.reqError, reqErrorRes);
               }
             });
         };

@@ -37,7 +37,7 @@ export class AjaxInterceptor {
         context: this
       };
 
-      myEmitter.customEmit(TrackerEvents.reqStart, reqStartRes);
+      myEmitter.emitWithGlobalData(TrackerEvents.reqStart, reqStartRes);
 
       return open.call(
         this,
@@ -63,7 +63,7 @@ export class AjaxInterceptor {
               status: this.status
             };
 
-            myEmitter.customEmit(TrackerEvents.reqEnd, reqEndRes);
+            myEmitter.emitWithGlobalData(TrackerEvents.reqEnd, reqEndRes);
           } else {
             const reqErrorObj: IHttpReqErrorRes = {
               requestMethod: this._method,
@@ -76,7 +76,7 @@ export class AjaxInterceptor {
 
             // If http error url match reportUrl, don't emit event
             if (this._url !== self._options.reportUrl) {
-              myEmitter.customEmit(TrackerEvents.reqError, reqErrorObj);
+              myEmitter.emitWithGlobalData(TrackerEvents.reqError, reqErrorObj);
             }
           }
         }
