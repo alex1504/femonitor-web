@@ -1,6 +1,6 @@
 {
   "name": "femonitor-web",
-  "version": "1.0.5",
+  "version": "1.1.0",
   "description": "A web SDK for frontend error and performance monnitor",
   "author": {
     "name": "alex1504"
@@ -44,7 +44,7 @@
     "mobile-detect": "^1.4.5",
     "query-string": "^7.0.0",
     "rrweb": "^0.9.14",
-    "tslib": "^2.2.0",
+    "tslib": "^2.3.1",
     "vue": "^2.6.12"
   },
   "devDependencies": {

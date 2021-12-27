@@ -65,7 +65,9 @@ import { Monitor } from "femonitor-web";
 const monitor = Monitor.init();
 /* Listen single event */
 monitor.on([event], (emitData) => {});
-/* Or Listen all event */
+/* Or listen some events by pass Array */
+monitor.on(["jsError", "unhandleRejection"], (eventName, emitData) => {});
+/* Or Listen all events */
 monitor.on("event", (eventName, emitData) => {});
 ```
 

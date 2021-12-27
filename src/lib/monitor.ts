@@ -127,6 +127,8 @@ export const defaultTrackerOptions = {
   isSpa: true
 };
 
+export type EventName = string | symbol;
+
 export class Monitor {
   public static instance: Monitor;
 
@@ -416,8 +418,16 @@ export class Monitor {
     });
   }
 
-  on(event: string | symbol, listener: (...args: any[]) => void): Monitor {
-    myEmitter.on(event, async (...args) => {
+  private _on(
+    eventName: EventName,
+    listener: (...args: any[]) => void,
+    withEventName = false
+  ) {
+    myEmitter.on(eventName, async (...args) => {
+      if (withEventName) {
+        args.unshift(eventName);
+      }
+
       myEmitter.emit(TrackerEvents._offConsoleTrack);
 
       await listener(...args);
@@ -428,25 +438,40 @@ export class Monitor {
     return this;
   }
 
-  once(event: string | symbol, listener: (...args: any[]) => void): Monitor {
+  on(
+    event: EventName | Array<EventName>,
+    listener: (...args: any[]) => void
+  ): Monitor {
+    if (event instanceof Array) {
+      event.forEach((eventName) => {
+        this._on(eventName, listener, true);
+      });
+
+      return this;
+    }
+
+    return this._on(event, listener);
+  }
+
+  once(event: EventName, listener: (...args: any[]) => void): Monitor {
     myEmitter.once(event, listener);
 
     return this;
   }
 
-  off(event: string | symbol, listener: (...args: any[]) => void): Monitor {
+  off(event: EventName, listener: (...args: any[]) => void): Monitor {
     myEmitter.off(event, listener);
 
     return this;
   }
 
-  removeAllListeners(event?: string | symbol | undefined): Monitor {
+  removeAllListeners(event?: EventName | undefined): Monitor {
     myEmitter.removeAllListeners(event);
 
     return this;
   }
 
-  emit(event: string | symbol, ...args: any[]): boolean {
+  emit(event: EventName, ...args: any[]): boolean {
     return myEmitter.customEmit(event, ...args);
   }
 
