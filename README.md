@@ -61,7 +61,7 @@ npm i femonitor-web -S
 ## Minimal options
 
 ```js
-import { WebMonitor } from "femonitor-web";
+import { Monitor } from "femonitor-web";
 const monitor = Monitor.init();
 /* Listen single event */
 monitor.on([event], (emitData) => {});

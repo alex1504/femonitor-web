@@ -127,8 +127,8 @@ export const defaultTrackerOptions = {
   isSpa: true
 };
 
-export class WebMonitor {
-  public static instance: WebMonitor;
+export class Monitor {
+  public static instance: Monitor;
 
   public errObserver: ErrorObserver;
 
@@ -178,7 +178,7 @@ export class WebMonitor {
    */
   static init(options: Partial<ITrackerOptions> | undefined = {}) {
     if (!this.instance) {
-      this.instance = new WebMonitor(options);
+      this.instance = new Monitor(options);
     }
 
     return this.instance;
@@ -325,8 +325,8 @@ export class WebMonitor {
     key: string,
     value: Record<string, unknown> | string | number | Array<any>,
     deepmerge?: boolean
-  ): WebMonitor;
-  configData(options: Record<string, unknown>, deepmerge?: boolean): WebMonitor;
+  ): Monitor;
+  configData(options: Record<string, unknown>, deepmerge?: boolean): Monitor;
   configData(
     key: Record<string, unknown> | string,
     value:
@@ -336,7 +336,7 @@ export class WebMonitor {
       | boolean
       | Array<any> = true,
     deepmerge = true
-  ): WebMonitor {
+  ): Monitor {
     if (typeof key === "string") {
       if (isObject(value) && deepmerge) {
         this.$data = merge(this.$data, value as Record<string, unknown>);
@@ -416,7 +416,7 @@ export class WebMonitor {
     });
   }
 
-  on(event: string | symbol, listener: (...args: any[]) => void): WebMonitor {
+  on(event: string | symbol, listener: (...args: any[]) => void): Monitor {
     myEmitter.on(event, async (...args) => {
       myEmitter.emit(TrackerEvents._offConsoleTrack);
 
@@ -428,19 +428,19 @@ export class WebMonitor {
     return this;
   }
 
-  once(event: string | symbol, listener: (...args: any[]) => void): WebMonitor {
+  once(event: string | symbol, listener: (...args: any[]) => void): Monitor {
     myEmitter.once(event, listener);
 
     return this;
   }
 
-  off(event: string | symbol, listener: (...args: any[]) => void): WebMonitor {
+  off(event: string | symbol, listener: (...args: any[]) => void): Monitor {
     myEmitter.off(event, listener);
 
     return this;
   }
 
-  removeAllListeners(event?: string | symbol | undefined): WebMonitor {
+  removeAllListeners(event?: string | symbol | undefined): Monitor {
     myEmitter.removeAllListeners(event);
 
     return this;

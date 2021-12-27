@@ -42,7 +42,7 @@ export class AjaxInterceptor {
       return open.call(
         this,
         method,
-        url,
+        this._url,
         typeof async === "boolean" ? async : true
       );
     };
