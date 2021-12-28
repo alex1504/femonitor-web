@@ -47,7 +47,7 @@ npm run test
 ## CDN
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/femonitor-web@1.1.2/dist/index.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/femonitor-web@1.1.4/dist/index.min.js"></script>
 ```
 
 ## NPM
