@@ -17,15 +17,14 @@ import {
   IClickBehavior,
   IConsoleBehavior
 } from "./behaviorObserver";
-import { getDeviceInfo, IDeviceInfo } from "./device";
+import { getDeviceInfo } from "./device";
 import { Reporter } from "./report";
 import { TrackerEvents, IHttpReqErrorRes } from "../types";
-import { isObject, getNetworkType } from "./util";
+import { isObject, getNetworkType, getLocaleLanguage } from "./util";
 import packageJson from "../../package.json";
 import { SpaHandler } from "./spaHandler";
 import { RrwebObserver } from "./rrwebObserver";
 import { eventWithTime } from "rrweb/typings/types";
-import stringify from "json-stringify-safe";
 
 export type ErrorCombine =
   | IError
@@ -92,7 +91,9 @@ export interface IConfigDataOptions {
   [key: string]: Value;
 }
 
-export type IData = Record<string, unknown>;
+export type PlainObject = Record<string | number | symbol, unknown>;
+
+export type IData = Record<string | number | symbol, unknown>;
 
 export const defaultTrackerOptions = {
   env: Env.Dev,
@@ -167,6 +168,7 @@ export class Monitor {
 
     this.getDeviceInfo();
     this.getNetworkType();
+    this.getLocaleLanguage();
     this.getUserAgent();
 
     this.initGlobalData();
@@ -192,10 +194,8 @@ export class Monitor {
   getDeviceInfo(): void {
     const deviceInfo = getDeviceInfo();
 
-    Object.keys(deviceInfo).forEach((key) => {
-      this.configData({
-        [`_${key}`]: deviceInfo[key as keyof IDeviceInfo]
-      });
+    this.configData({
+      _deviceInfo: deviceInfo
     });
   }
 
@@ -203,6 +203,13 @@ export class Monitor {
     const networkType = getNetworkType();
     this.configData({
       _networkType: networkType
+    });
+  }
+
+  getLocaleLanguage(): void {
+    const localeLanguage = getLocaleLanguage();
+    this.configData({
+      _locale: localeLanguage
     });
   }
 
@@ -306,8 +313,8 @@ export class Monitor {
   private listenPerformanceInfo() {
     myEmitter.on(
       TrackerEvents.performanceInfoReady,
-      (performanceInfo: IPerformanceInfo<number>) => {
-        this.configData("_performance", stringify(performanceInfo), false);
+      (performanceInfo: IPerformanceInfo) => {
+        this.configData("_performance", performanceInfo, false);
       }
     );
   }
@@ -323,41 +330,31 @@ export class Monitor {
   /**
    * 设置全局数据
    */
+  configData(key: string, value: unknown, deepmerge?: boolean): Monitor;
+  configData(options: PlainObject, deepmerge?: boolean): Monitor;
   configData(
-    key: string,
-    value: Record<string, unknown> | string | number | Array<any>,
-    deepmerge?: boolean
-  ): Monitor;
-  configData(options: Record<string, unknown>, deepmerge?: boolean): Monitor;
-  configData(
-    key: Record<string, unknown> | string,
-    value:
-      | Record<string, unknown>
-      | string
-      | number
-      | boolean
-      | Array<any> = true,
+    key: PlainObject | string,
+    value: unknown,
     deepmerge = true
   ): Monitor {
     if (typeof key === "string") {
       if (isObject(value) && deepmerge) {
-        this.$data = merge(this.$data, value as Record<string, unknown>);
+        this.$data = merge(this.$data, value as PlainObject);
       } else {
         this.$data[key as string] = value;
       }
     } else if (isObject(key)) {
-      if (typeof value !== "boolean") {
-        throw new Error("deepmerge should be boolean");
+      if (typeof value === "boolean") {
+        deepmerge = value;
       }
-
-      deepmerge = value;
       value = key;
+
       if (deepmerge) {
-        this.$data = merge(this.$data, value);
+        this.$data = merge(this.$data, value as PlainObject);
       } else {
         this.$data = {
           ...this.$data,
-          ...value
+          ...(value as PlainObject)
         };
       }
     }
