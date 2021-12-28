@@ -1,12 +1,12 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "ES6",
     "outDir": "dist",
     "sourceMap": true,
     "declaration": true,
 
     "lib": ["dom", "es6"],
-    "module": "commonjs",
+    "module": "ES6",
     "moduleResolution": "node",
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
@@ -19,5 +19,5 @@
     "experimentalDecorators": true,
     "preserveConstEnums": true
   },
-  "include": ["src", "test", "typings"]
+  "include": ["src/**/*", "test/**/*.ts"]
 }

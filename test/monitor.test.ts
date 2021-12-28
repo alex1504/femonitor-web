@@ -1,6 +1,5 @@
-import { Monitor } from "../src/index";
+import { Monitor, TrackerEvents } from "../src/index";
 import jestMock from "jest-fetch-mock";
-import { TrackerEvents } from "../src/types";
 
 jestMock.enableMocks();
 

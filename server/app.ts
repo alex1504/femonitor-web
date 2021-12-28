@@ -54,4 +54,4 @@ app.use(router.routes());
 app.use(router.allowedMethods());
 
 app.listen(port);
-console.log(`Server is now listening on port ${port}`);
+console.log(`Server is now listening on: http://localhost:${port}`);

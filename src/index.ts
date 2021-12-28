@@ -6,4 +6,6 @@ export * from "./lib/fetchInterceptor";
 export * from "./lib/errorObserver";
 export * from "./lib/performance";
 export * from "./lib/report";
+export * from "./types/index";
+
 export { DeviceUtil };
