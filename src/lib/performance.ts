@@ -1,15 +1,23 @@
 import { TrackerEvents } from "../types/index";
 import { myEmitter } from "./event";
 
-export interface IPerformanceInfo<type> {
-  dnsLkTime: type;
-  tcpConTime: type;
-  reqTime: type;
-  domParseTime: type;
-  domReadyTime: type;
-  loadTime: type;
-  fpTime: type;
-  fcpTime: type;
+export enum NavigationType {
+  navigate = 0,
+  reload = 1,
+  forward = 2,
+  reserved = 255
+}
+
+export interface IPerformanceInfo<T = number> {
+  dnsLkTime: T;
+  tcpConTime: T;
+  reqTime: T;
+  domParseTime: T;
+  domReadyTime: T;
+  loadTime: T;
+  fpTime: T;
+  fcpTime: T;
+  navigationType: string;
 }
 
 export class PerformanceObserver {
@@ -22,7 +30,7 @@ export class PerformanceObserver {
       console.warn("Your browser does not suppport performance api.");
       return;
     }
-    
+
     this.performance = window.performance;
     this.timingInfo = this.performance.timing;
   }
@@ -68,8 +76,9 @@ export class PerformanceObserver {
     const loadTime = loadEventEnd - navigationStart;
     const fpTime = responseStart - fetchStart;
     const fcpTime = domComplete - fetchStart;
+    const navigationType = NavigationType[this.performance.navigation.type];
 
-    const performanceInfo: IPerformanceInfo<number> = {
+    const performanceInfo: IPerformanceInfo = {
       dnsLkTime,
       tcpConTime,
       reqTime,
@@ -77,7 +86,8 @@ export class PerformanceObserver {
       domReadyTime,
       loadTime,
       fpTime,
-      fcpTime
+      fcpTime,
+      navigationType
     };
 
     myEmitter.customEmit(TrackerEvents.performanceInfoReady, performanceInfo);
