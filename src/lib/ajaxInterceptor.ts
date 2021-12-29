@@ -6,15 +6,15 @@ import {
   ErrorType
 } from "../types/index";
 import { myEmitter } from "./event";
+import { BaseErrorObserver } from "./baseErrorObserver";
 
 export interface IAjaxReqStartRes {
   context: any;
 }
 
-export class AjaxInterceptor {
-  private _options;
-
+export class AjaxInterceptor extends BaseErrorObserver {
   constructor(options: ITrackerOptions) {
+    super(options);
     this._options = options;
   }
 
@@ -65,6 +65,7 @@ export class AjaxInterceptor {
 
             myEmitter.emitWithGlobalData(TrackerEvents.reqEnd, reqEndRes);
           } else {
+            const errorType = ErrorType.httpRequestError;
             const reqErrorObj: IHttpReqErrorRes = {
               requestMethod: this._method,
               requestUrl: this._url,
@@ -76,7 +77,11 @@ export class AjaxInterceptor {
 
             // If http error url match reportUrl, don't emit event
             if (this._url !== self._options.reportUrl) {
-              myEmitter.emitWithGlobalData(TrackerEvents.reqError, reqErrorObj);
+              self.safeEmitError(
+                `${errorType}: ${this._url}`,
+                TrackerEvents.reqError,
+                reqErrorObj
+              );
             }
           }
         }

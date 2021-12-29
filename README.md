@@ -47,7 +47,7 @@ npm run test
 ## CDN
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/femonitor-web@1.1.4/dist/index.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/femonitor-web@1.2.0/dist/index.min.js"></script>
 ```
 
 ## NPM
@@ -64,11 +64,20 @@ npm i femonitor-web -S
 import { Monitor } from "femonitor-web";
 const monitor = Monitor.init();
 /* Listen single event */
-monitor.on([event], (emitData) => {});
-/* Or listen some events by pass Array */
-monitor.on(["jsError", "unhandleRejection"], (eventName, emitData) => {});
-/* Or Listen all events */
-monitor.on("event", (eventName, emitData) => {});
+monitor.on([event], (emitData) => {
+  // Do report
+  // ...
+});
+/* Or listen some events by pass Array, eg: only listen error events */
+monitor.on(["jsError", "unhandleRejection", "resourceError", "vuejsError", "reqError"], (eventName, emitData) => {
+  // Do report
+  // ...
+});
+/* Or Listen all events, not recommend */
+monitor.on("event", (eventName, emitData) => {
+  // Do report
+  // ...
+});
 ```
 
 ## Full options
@@ -82,7 +91,7 @@ export const defaultTrackerOptions = {
   error: {
     watch: true, // If listen all error
     random: 1, // Sampling rate from 0 to 1, 1 means emit all error
-    repeat: 5, // Don't emit sample error events when exceed 5 times
+    repeat: 5, // 5 means don't emit sample error events when exceed 5 times. Be careful to set large number because if your report handler cause error, it would probably cause js dead cycle
     delay: 1000 // Delay emit event after 1000 ms
   },
   performance: false, // If want to collect performance data
@@ -151,8 +160,8 @@ class ErrorBoundary extends React.Component {
 | vuejsError           | Vue.config.errorHandler                                                 |
 | unhandleRejection    | window.onunhandledrejection                                             |
 | resourceError        | Resource request error                                                  |
-| batchErrors          | Batch collection of error events, trigger every specified time interval |
 | reqError             | Network request error                                                   |
+| batchErrors          | Batch collection of error events, includes 'jsError', 'vuejsError', 'unHandleRejection', 'resourceError' and 'reqError' , trigger every specified time interval |
 | reqStart             | Network request start                                                   |
 | reqEnd               | Network request end                                                     |
 | performanceInfoReady | Performance data is ready                                               |

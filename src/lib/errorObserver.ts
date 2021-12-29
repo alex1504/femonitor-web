@@ -1,30 +1,17 @@
-import { IErrorOptions, ITrackerOptions } from "./monitor";
+import { ITrackerOptions } from "./monitor";
 import { TrackerEvents, BaseError, ErrorType } from "../types/index";
 import { myEmitter } from "./event";
 import ErrorStackParser from "error-stack-parser";
 import stringify from "json-stringify-safe";
+import {
+  BaseErrorObserver,
+  IError,
+  IUnHandleRejectionError
+} from "./baseErrorObserver";
 
-export interface IError extends BaseError {
-  msg: string | Event;
-  line: number | undefined;
-  column: number | undefined;
-  stackTrace: string;
-}
-
-export interface IUnHandleRejectionError extends BaseError {
-  msg: string;
-}
-
-export interface ICacheError {
-  [errorMsg: string]: number;
-}
-
-export class ErrorObserver {
-  public _options;
-  private _cacheError: ICacheError;
-
+export class ErrorObserver extends BaseErrorObserver {
   constructor(options: ITrackerOptions) {
-    this._cacheError = {};
+    super(options);
     this._options = options;
   }
 
@@ -52,17 +39,7 @@ export class ErrorObserver {
         context: this
       };
 
-      if (typeof self._cacheError[msgText] !== "number") {
-        self._cacheError[msgText] = 0;
-      } else {
-        self._cacheError[msgText] += 1;
-      }
-
-      // Repeated error events emit limit
-      const repeat = (self._options.error as IErrorOptions).repeat;
-      if (self._cacheError[msgText] < repeat) {
-        myEmitter.emitWithGlobalData(TrackerEvents.jsError, errorObj);
-      }
+      self.safeEmitError(msgText, TrackerEvents.jsError, errorObj);
     };
 
     window.onunhandledrejection = function (error: PromiseRejectionEvent) {
@@ -75,7 +52,8 @@ export class ErrorObserver {
         errorType: ErrorType.unHandleRejectionError,
         context: this
       };
-      myEmitter.emitWithGlobalData(TrackerEvents.unHandleRejection, errorObj);
+
+      self.safeEmitError(error.reason, TrackerEvents.unHandleRejection, errorObj);
     };
 
     window.addEventListener(
@@ -95,11 +73,19 @@ export class ErrorObserver {
           url = target.src;
         }
 
+        const errorType = ErrorType.resourceError;
         const errorObj: BaseError = {
           url,
-          errorType: ErrorType.resourceError,
+          errorType: errorType,
           context: this
         };
+
+        self.safeEmitError(
+          `${errorType}: ${url}`,
+          TrackerEvents.resourceError,
+          errorObj
+        );
+
         myEmitter.emitWithGlobalData(TrackerEvents.resourceError, errorObj);
       },
       true

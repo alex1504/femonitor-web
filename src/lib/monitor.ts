@@ -1,11 +1,7 @@
 import merge from "deepmerge";
 import { VueConstructor } from "vue";
 import { myEmitter } from "./event";
-import {
-  ErrorObserver,
-  IError,
-  IUnHandleRejectionError
-} from "./errorObserver";
+import { ErrorObserver } from "./errorObserver";
 import { ISimpleVueError, IVueError } from "./vueErrorObserver";
 import { AjaxInterceptor } from "./ajaxInterceptor";
 import { VueErrorObserver } from "./vueErrorObserver";
@@ -25,6 +21,7 @@ import packageJson from "../../package.json";
 import { SpaHandler } from "./spaHandler";
 import { RrwebObserver } from "./rrwebObserver";
 import { eventWithTime } from "rrweb/typings/types";
+import { IError, IUnHandleRejectionError } from "./baseErrorObserver";
 
 export type ErrorCombine =
   | IError
@@ -359,7 +356,7 @@ export class Monitor {
       }
     }
 
-    myEmitter.emit("_globalDataChange", this.$data);
+    myEmitter.emit(TrackerEvents._globalDataChange, this.$data);
 
     return this;
   }
@@ -473,6 +470,6 @@ export class Monitor {
   }
 
   useVueErrorListener(Vue: VueConstructor) {
-    new VueErrorObserver(Vue);
+    new VueErrorObserver(Vue, this.$options);
   }
 }

@@ -17,7 +17,9 @@ export enum TrackerEvents {
   _console = "_console",
   _onConsoleTrack = "_onConsoleTrack",
   _offConsoleTrack = "_offConsoleTrack",
-  _mouseTrack = "_mouseTrack"
+  _mouseTrack = "_mouseTrack",
+  _initOptions = "_initOptions",
+  _globalDataChange = "_globalDataChange"
 }
 
 export interface IReqEndRes {

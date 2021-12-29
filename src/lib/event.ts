@@ -22,7 +22,7 @@ export class MyEmitter extends EventEmitter {
       Reflect.deleteProperty(data, "beforeEmit");
     }
 
-    super.emit(TrackerEvents.event, event, data, ...rest)
+    super.emit(TrackerEvents.event, event, data, ...rest);
     return super.emit(event, data, ...rest);
   }
 
@@ -71,7 +71,7 @@ export class MyEmitter extends EventEmitter {
 
   init() {
     this.globalData = {};
-    this.on("_globalDataChange", (globalData) => {
+    this.on(TrackerEvents._globalDataChange, (globalData) => {
       this.globalData = globalData;
     });
   }

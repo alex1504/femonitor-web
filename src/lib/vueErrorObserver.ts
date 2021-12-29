@@ -2,7 +2,8 @@ import { VueConstructor } from "vue";
 import ErrorStackParser from "error-stack-parser";
 import stringify from "json-stringify-safe";
 import { BaseError, ErrorType, TrackerEvents } from "../types/index";
-import { myEmitter } from "./event";
+import { ITrackerOptions } from "./monitor";
+import { BaseErrorObserver } from "./baseErrorObserver";
 
 export interface IVueError extends BaseError {
   info: string | undefined;
@@ -18,14 +19,18 @@ export interface ISimpleVueError extends BaseError {
   stackTrace: string;
 }
 
-export class VueErrorObserver {
-  constructor(Vue: VueConstructor) {
+export class VueErrorObserver extends BaseErrorObserver {
+  constructor(Vue: VueConstructor, options: ITrackerOptions) {
+    super(options);
+
     this.init(Vue);
   }
 
-  init(Vue: VueConstructor) {
+  init(Vue: VueConstructor): void {
     Vue.config.errorHandler = (err, vm, info) => {
       const stackTrace = err ? ErrorStackParser.parse(err) : [];
+      const errorMsg = err.message;
+      const errorType = ErrorType.vueJsError;
 
       try {
         if (vm) {
@@ -33,8 +38,8 @@ export class VueErrorObserver {
           const componentNameTrace = this.getComponentNameTrace(vm);
           const propsData = vm.$options && vm.$options.propsData;
           const errorObj: IVueError = {
-            errorType: ErrorType.vueJsError,
-            msg: err.message,
+            errorType: errorType,
+            msg: errorMsg,
             stackTrace: stringify(stackTrace),
             componentName: componentName,
             propsData: propsData,
@@ -42,15 +47,23 @@ export class VueErrorObserver {
             componentNameTrace
           };
 
-          myEmitter.emitWithGlobalData(TrackerEvents.vuejsError, errorObj);
+          this.safeEmitError(
+            `${errorType}: ${errorMsg}`,
+            TrackerEvents.vuejsError,
+            errorObj
+          );
         } else {
           const errorObj: ISimpleVueError = {
-            errorType: ErrorType.vueJsError,
-            msg: err.message,
+            errorType: errorType,
+            msg: errorMsg,
             stackTrace: stringify(stackTrace)
           };
 
-          myEmitter.emitWithGlobalData(TrackerEvents.vuejsError, errorObj);
+          this.safeEmitError(
+            `${errorType}: ${errorMsg}`,
+            TrackerEvents.vuejsError,
+            errorObj
+          );
         }
       } catch (error) {
         throw new Error(typeof error === "string" ? error : "");

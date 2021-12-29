@@ -32,7 +32,7 @@
       <h2>batchErrors</h2>
       <p>This event will combine errors to emit together in a while time (could be config), default is 1 second</p>
       <div>
-        <el-button onClick="onJsError()">Hit this button fast</el-button>
+        <el-button onClick="onJsError1()">Hit this button fast</el-button>
       </div>
 
       <h2>VuejsError</h2>
@@ -70,6 +70,7 @@
     </section>
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/axios@0.24.0/dist/axios.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/vue-router@3.0.3/dist/vue-router.min.js"></script>
@@ -81,7 +82,7 @@
     const isPerformance = localStorage.getItem("performance") ? true : false;
     const monitor = FeMonitor.Monitor.init({
       error: {
-        repeat: 10000
+        repeat: 10
       },
       rrweb: {
         watch: isRRweb
@@ -90,6 +91,7 @@
     });
 
     monitor.useVueErrorListener(Vue);
+    // Not recommend listen all event, only for demo
     monitor.on("event", (eventName, emitData) => {
       console.log(eventName, emitData);
     });
@@ -97,7 +99,7 @@
     Vue.component("component-a", {
       methods: {
         onVuejsComponentError() {
-          throw new Error("error");
+          throw new Error("mock vuejs error");
         }
       },
       template: `<div> <el-button @click="onVuejsComponentError">test</el-button></div>`
@@ -208,6 +210,9 @@
   <script>
     function onJsError() {
       throw new Error("jsError");
+    }
+    function onJsError1() {
+      throw new Error("jsError1");
     }
   </script>
 </body>

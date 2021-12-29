@@ -6,6 +6,7 @@ import {
   IHttpReqErrorRes
 } from "../types/index";
 import { myEmitter } from "./event";
+import { BaseErrorObserver } from "./baseErrorObserver";
 
 export interface IFetchReqStartRes {
   url: string;
@@ -13,10 +14,11 @@ export interface IFetchReqStartRes {
   context?: any;
 }
 
-export class FetchInterceptor {
-  private _options;
+export class FetchInterceptor extends BaseErrorObserver {
+  public _options;
 
   constructor(options: ITrackerOptions) {
+    super(options);
     this._options = options;
   }
 
@@ -53,35 +55,45 @@ export class FetchInterceptor {
                 status
               };
 
+              const errorType = ErrorType.httpRequestError;
               const reqErrorRes: IHttpReqErrorRes = {
                 requestMethod: this._method,
                 requestUrl: this._url,
                 requestData: this._data,
                 errorMsg: res.statusText,
-                errorType: ErrorType.httpRequestError
+                errorType
               };
 
               if (status >= 200 && status < 300) {
                 myEmitter.emitWithGlobalData(TrackerEvents.reqEnd, reqEndRes);
               } else {
                 if (this._url !== self._options.reportUrl) {
-                  myEmitter.emitWithGlobalData(TrackerEvents.reqError, reqErrorRes);
+                  self.safeEmitError(
+                    `${errorType}: ${this._url}`,
+                    TrackerEvents.reqError,
+                    reqErrorRes
+                  );
                 }
               }
 
               return Promise.resolve(res);
             })
             .catch((e: Error) => {
+              const errorType = ErrorType.httpRequestError;
               const reqErrorRes: IHttpReqErrorRes = {
                 requestMethod: this._method,
                 requestUrl: this._url,
                 requestData: this._data,
                 errorMsg: e.message,
-                errorType: ErrorType.httpRequestError
+                errorType
               };
 
               if (this._url !== self._options.reportUrl) {
-                myEmitter.emitWithGlobalData(TrackerEvents.reqError, reqErrorRes);
+                self.safeEmitError(
+                  `${errorType}: ${this._url}`,
+                  TrackerEvents.reqError,
+                  reqErrorRes
+                );
               }
             });
         };
