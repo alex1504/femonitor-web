@@ -1,6 +1,6 @@
-# Description
+# femonitor-web &middot; [![GitHub license](https://img.shields.io/npm/l/femonitor-web.svg?sanitize=true)](https://github.com/alex1504/femonitor-web/blob/master/LICENSE) [![npm version](https://img.shields.io/npm/v/femonitor-web.svg?sanitize=true)](https://www.npmjs.com/package/femonitor-web) [![Downloads](https://img.shields.io/npm/dm/femonitor-web.svg?sanitize=true)](https://npmcharts.com/compare/femonitor-web?minimal=true)
 
-A SDK for web error and performance monitor using event subscription
+A SDK for web error and performance monitor wrote on typescript.
 
 # Screenshot
 ![screenshot](https://cdn.jsdelivr.net/gh/sandy1504/media@master/20210407/screenshot.6l0t3bpqubw0.gif)
@@ -47,7 +47,7 @@ npm run test
 ## CDN
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/femonitor-web@1.3.1/dist/index.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/femonitor-web@1.3.2/dist/index.min.js"></script>
 ```
 
 ## NPM
