@@ -43,9 +43,12 @@ export interface IErrorOptions {
   delay: number;
 }
 
+export type URLItem = string | RegExp;
+
 export interface IHttpOptions {
   fetch: boolean;
   ajax: boolean;
+  ignoreRules: URLItem[];
 }
 
 export enum ConsoleType {
@@ -105,7 +108,8 @@ export const defaultTrackerOptions = {
   performance: false,
   http: {
     fetch: true,
-    ajax: true
+    ajax: true,
+    ignoreRules: []
   },
   behavior: {
     watch: false,

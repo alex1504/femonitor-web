@@ -47,7 +47,7 @@ npm run test
 ## CDN
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/femonitor-web@1.2.0/dist/index.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/femonitor-web@1.3.1/dist/index.min.js"></script>
 ```
 
 ## NPM
@@ -97,7 +97,8 @@ export const defaultTrackerOptions = {
   performance: false, // If want to collect performance data
   http: {
     fetch: true, // If listen request use fetch interface
-    ajax: true // If listen ajax request
+    ajax: true,  // If listen ajax request
+    ignoreRules: [] // If request url match rules, interceptor won't emit events. Support string and regexp
   },
   behavior: {
     watch: false,
@@ -114,7 +115,7 @@ export const defaultTrackerOptions = {
     queueLimit: 50, // Limit rrweb queue to 20
     delay: 1000 // Emit event after 1000 ms
   },
-  isSpa: true // If watch is true, globalData can get _spaUrl for report when route change
+  isSpa: true // If watch is true, globalData would add _spaUrl property when route change
 };
 const monitor = Monitor.init(defaultTrackerOptions);
 ```

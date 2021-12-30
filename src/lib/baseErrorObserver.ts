@@ -1,6 +1,7 @@
 import { IErrorOptions, ITrackerOptions } from "./monitor";
 import { BaseError } from "../types/index";
 import { myEmitter } from "./event";
+import { replaceSlash } from "./util";
 
 export interface IError extends BaseError {
   msg: string | Event;
@@ -17,7 +18,7 @@ export interface ICacheError {
   [errorMsg: string]: number;
 }
 
-export class BaseErrorObserver {
+export class BaseObserver {
   public _options;
   private _cacheError: ICacheError;
 
@@ -49,5 +50,26 @@ export class BaseErrorObserver {
         errorObj
       );
     }
+  }
+
+  /**
+   * Check if request url match ignored rules
+   */
+  isUrlInIgnoreList(url: string): boolean {
+    const ignoreList = this._options.http.ignoreRules;
+    const reportUrl = this._options.reportUrl;
+
+    // If reportUrl is setted, alse add to ignoreList
+    if (reportUrl) {
+      ignoreList.push(reportUrl);
+    }
+
+    return ignoreList.some((urlItem) => {
+      if (typeof urlItem === "string") {
+        return replaceSlash(urlItem) === replaceSlash(url);
+      } else {
+        return urlItem.test(url);
+      }
+    });
   }
 }

@@ -3,7 +3,7 @@ import ErrorStackParser from "error-stack-parser";
 import stringify from "json-stringify-safe";
 import { BaseError, ErrorType, TrackerEvents } from "../types/index";
 import { ITrackerOptions } from "./monitor";
-import { BaseErrorObserver } from "./baseErrorObserver";
+import { BaseObserver } from "./baseErrorObserver";
 
 export interface IVueError extends BaseError {
   info: string | undefined;
@@ -19,7 +19,7 @@ export interface ISimpleVueError extends BaseError {
   stackTrace: string;
 }
 
-export class VueErrorObserver extends BaseErrorObserver {
+export class VueErrorObserver extends BaseObserver {
   constructor(Vue: VueConstructor, options: ITrackerOptions) {
     super(options);
 

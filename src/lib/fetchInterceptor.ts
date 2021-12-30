@@ -6,7 +6,7 @@ import {
   IHttpReqErrorRes
 } from "../types/index";
 import { myEmitter } from "./event";
-import { BaseErrorObserver } from "./baseErrorObserver";
+import { BaseObserver } from "./baseErrorObserver";
 
 export interface IFetchReqStartRes {
   url: string;
@@ -14,7 +14,7 @@ export interface IFetchReqStartRes {
   context?: any;
 }
 
-export class FetchInterceptor extends BaseErrorObserver {
+export class FetchInterceptor extends BaseObserver {
   public _options;
 
   constructor(options: ITrackerOptions) {
@@ -34,13 +34,17 @@ export class FetchInterceptor extends BaseErrorObserver {
           this._url = url;
           this._method = options.method || "get";
           this._data = options.body;
+          this._isUrlInIgnoreList = self.isUrlInIgnoreList(url);
 
           const startTime: number = Date.now();
           const reqStartRes: IFetchReqStartRes = {
             url,
             options
           };
-          myEmitter.emitWithGlobalData(TrackerEvents.reqStart, reqStartRes);
+
+          if (!this._isUrlInIgnoreList) {
+            myEmitter.emitWithGlobalData(TrackerEvents.reqStart, reqStartRes);
+          }
 
           return originFetch(url, options)
             .then((res) => {
@@ -64,10 +68,10 @@ export class FetchInterceptor extends BaseErrorObserver {
                 errorType
               };
 
-              if (status >= 200 && status < 300) {
-                myEmitter.emitWithGlobalData(TrackerEvents.reqEnd, reqEndRes);
-              } else {
-                if (this._url !== self._options.reportUrl) {
+              if (!this._isUrlInIgnoreList) {
+                if (status >= 200 && status < 300) {
+                  myEmitter.emitWithGlobalData(TrackerEvents.reqEnd, reqEndRes);
+                } else {
                   self.safeEmitError(
                     `${errorType}: ${this._url}`,
                     TrackerEvents.reqError,
@@ -88,7 +92,7 @@ export class FetchInterceptor extends BaseErrorObserver {
                 errorType
               };
 
-              if (this._url !== self._options.reportUrl) {
+              if (!this._isUrlInIgnoreList) {
                 self.safeEmitError(
                   `${errorType}: ${this._url}`,
                   TrackerEvents.reqError,

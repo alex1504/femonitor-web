@@ -6,13 +6,13 @@ import {
   ErrorType
 } from "../types/index";
 import { myEmitter } from "./event";
-import { BaseErrorObserver } from "./baseErrorObserver";
+import { BaseObserver } from "./baseErrorObserver";
 
 export interface IAjaxReqStartRes {
   context: any;
 }
 
-export class AjaxInterceptor extends BaseErrorObserver {
+export class AjaxInterceptor extends BaseObserver {
   constructor(options: ITrackerOptions) {
     super(options);
     this._options = options;
@@ -32,12 +32,15 @@ export class AjaxInterceptor extends BaseErrorObserver {
     ) {
       this._url = typeof url === "string" ? url : url.href;
       this._method = method;
+      this._isUrlInIgnoreList = self.isUrlInIgnoreList(this._url);
 
       const reqStartRes: IAjaxReqStartRes = {
         context: this
       };
 
-      myEmitter.emitWithGlobalData(TrackerEvents.reqStart, reqStartRes);
+      if (!this._isUrlInIgnoreList) {
+        myEmitter.emitWithGlobalData(TrackerEvents.reqStart, reqStartRes);
+      }
 
       return open.call(
         this,
@@ -53,6 +56,10 @@ export class AjaxInterceptor extends BaseErrorObserver {
       const startTime = Date.now();
 
       this.addEventListener("readystatechange", function () {
+        if (this._isUrlInIgnoreList) {
+          return;
+        }
+
         if (this.readyState === 4) {
           if (this.status >= 200 && this.status < 300) {
             const reqEndRes: IReqEndRes = {
