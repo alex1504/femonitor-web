@@ -73,7 +73,7 @@ export function replaceSlash(url: string) {
 }
 
 export function convertObjToUrlencoded(obj: {
-  [key: string | symbol]: any;
+  [key: string]: any;
 }): string {
   return new URLSearchParams(Object.entries(obj)).toString();
 }
