@@ -42,22 +42,21 @@ export class ErrorObserver extends BaseObserver {
       self.safeEmitError(msgText, TrackerEvents.jsError, errorObj);
     };
 
-    window.onunhandledrejection = function (error: PromiseRejectionEvent) {
+    window.onunhandledrejection = function (e: PromiseRejectionEvent) {
       if (oldUnHandleRejection) {
-        oldUnHandleRejection.call(window, error);
+        oldUnHandleRejection.call(window, e);
       }
 
+      const error = e.reason;
+      const errMsg = error instanceof Error ? error.message : error;
+
       const errorObj: IUnHandleRejectionError = {
-        msg: error.reason,
+        msg: errMsg,
         errorType: ErrorType.unHandleRejectionError,
         context: this
       };
 
-      self.safeEmitError(
-        error.reason,
-        TrackerEvents.unHandleRejection,
-        errorObj
-      );
+      self.safeEmitError(errMsg, TrackerEvents.unHandleRejection, errorObj);
     };
 
     window.addEventListener(
