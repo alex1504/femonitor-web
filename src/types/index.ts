@@ -1,14 +1,15 @@
 export enum TrackerEvents {
   /* SDK expose events */
+  jsError = "jsError",
+  unHandleRejection = "unHandleRejection",
+  resourceError = "resourceError",
+  reqError = "reqError",
+  vuejsError = "vuejsError",
+  batchErrors = "batchErrors",
+
   performanceInfoReady = "performanceInfoReady",
   reqStart = "reqStart",
   reqEnd = "reqEnd",
-  reqError = "reqError",
-  jsError = "jsError",
-  vuejsError = "vuejsError",
-  unHandleRejection = "unHandleRejection",
-  resourceError = "resourceError",
-  batchErrors = "batchErrors",
   mouseTrack = "mouseTrack",
   event = "event",
 
@@ -33,9 +34,9 @@ export interface IReqEndRes {
 }
 
 export interface BaseError {
+  errorType: ErrorType;
   url?: string | undefined;
   path?: string | undefined;
-  errorType: ErrorType;
   context?: any;
 }
 

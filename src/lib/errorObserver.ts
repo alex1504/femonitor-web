@@ -53,7 +53,11 @@ export class ErrorObserver extends BaseObserver {
         context: this
       };
 
-      self.safeEmitError(error.reason, TrackerEvents.unHandleRejection, errorObj);
+      self.safeEmitError(
+        error.reason,
+        TrackerEvents.unHandleRejection,
+        errorObj
+      );
     };
 
     window.addEventListener(

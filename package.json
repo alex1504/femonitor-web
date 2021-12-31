@@ -1,6 +1,6 @@
 {
   "name": "femonitor-web",
-  "version": "1.3.2",
+  "version": "1.4.0",
   "description": "A web SDK for frontend error and performance monnitor",
   "author": {
     "name": "alex1504"
@@ -41,6 +41,7 @@
     "events": "^3.3.0",
     "json-stringify-safe": "^5.0.1",
     "mobile-detect": "^1.4.5",
+    "object-to-formdata": "^4.4.1",
     "query-string": "^7.0.0",
     "rrweb": "^0.9.14",
     "tslib": "^2.3.1",

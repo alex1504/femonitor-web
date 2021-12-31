@@ -57,7 +57,7 @@ export class BaseObserver {
    */
   isUrlInIgnoreList(url: string): boolean {
     const ignoreList = this._options.http.ignoreRules;
-    const reportUrl = this._options.reportUrl;
+    const reportUrl = this._options.report.url;
 
     // If reportUrl is setted, alse add to ignoreList
     if (reportUrl) {

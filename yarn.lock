@@ -6917,6 +6917,11 @@ object-keys@^1.0.0, object-keys@^1.0.12, object-keys@^1.1.1:
   resolved "https://registry.npmmirror.com/object-keys/download/object-keys-1.1.1.tgz#1c47f272df277f3b1daf061677d9c82e2322c60e"
   integrity sha1-HEfyct8nfzsdrwYWd9nILiMixg4=
 
+object-to-formdata@^4.4.1:
+  version "4.4.1"
+  resolved "https://registry.npmmirror.com/object-to-formdata/download/object-to-formdata-4.4.1.tgz#70e599e6887c8caa5b7fca741fb72ae9f60ea784"
+  integrity sha512-hHqo2JID8muY6hSeaEmze8BRN7bYu/BZvh2a+okxMHrYOkU29kxqlkn1ITAqsH7Mx9eRSWlJ3cC6sV3sx5F+6Q==
+
 object-visit@^1.0.0:
   version "1.0.1"
   resolved "https://registry.npmmirror.com/object-visit/download/object-visit-1.0.1.tgz#f79c4493af0c5377b59fe39d395e41042dd045bb"
@@ -9211,10 +9216,8 @@ watchpack@^1.7.4:
   resolved "https://registry.npmmirror.com/watchpack/download/watchpack-1.7.5.tgz#1267e6c55e0b9b5be44c2023aed5437a2c26c453"
   integrity sha1-EmfmxV4Lm1vkTCAjrtVDeiwmxFM=
   dependencies:
-    chokidar "^3.4.1"
     graceful-fs "^4.1.2"
     neo-async "^2.5.0"
-    watchpack-chokidar2 "^2.0.1"
   optionalDependencies:
     chokidar "^3.4.1"
     watchpack-chokidar2 "^2.0.1"

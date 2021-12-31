@@ -71,3 +71,9 @@ export function getLocaleLanguage() {
 export function replaceSlash(url: string) {
   return url.replace(/^\/|\/$/g, "");
 }
+
+export function convertObjToUrlencoded(obj: {
+  [key: string | symbol]: any;
+}): string {
+  return new URLSearchParams(Object.entries(obj)).toString();
+}

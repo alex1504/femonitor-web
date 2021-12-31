@@ -3,6 +3,7 @@
 A SDK for web error and performance monitor wrote on typescript.
 
 # Screenshot
+
 ![screenshot](https://cdn.jsdelivr.net/gh/sandy1504/media@master/20210407/screenshot.6l0t3bpqubw0.gif)
 
 # Example
@@ -19,7 +20,7 @@ Open chrome developer tool to see console information
 - [x] Observe user behaviors, includes console, user click event
 - [x] Integrate rrweb
 - [x] Hack spa router change
-- [x] Auto report
+- [x] Auto report error events by config
 
 # Development
 
@@ -47,7 +48,7 @@ npm run test
 ## CDN
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/femonitor-web@1.3.2/dist/index.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/femonitor-web@1.4.0/dist/index.min.js"></script>
 ```
 
 ## NPM
@@ -69,10 +70,13 @@ monitor.on([event], (emitData) => {
   // ...
 });
 /* Or listen some events by pass Array, eg: only listen error events */
-monitor.on(["jsError", "unhandleRejection", "resourceError", "vuejsError", "reqError"], (eventName, emitData) => {
-  // Do report
-  // ...
-});
+monitor.on(
+  ["jsError", "unhandleRejection", "resourceError", "vuejsError", "reqError"],
+  (eventName, emitData) => {
+    // Do report
+    // ...
+  }
+);
 /* Or Listen all events, not recommend */
 monitor.on("event", (eventName, emitData) => {
   // Do report
@@ -86,7 +90,13 @@ monitor.on("event", (eventName, emitData) => {
 // Default full options
 export const defaultTrackerOptions = {
   env: "dev",
-  reportUrl: "",
+  // Auto report config, only error events(jsError, unHandleRejection, resourceError, reqError, vuejsError) take effect
+  report: {
+    url: "",  // Report url, set a correct reportUrl to open autoReport switch
+    method: "POST",
+    contentType: "application/json",
+    beforeSend: (data) => data  // Decorate report data before request send, support decorate or return object to overrite
+  },
   data: {},
   error: {
     watch: true, // If listen all error
@@ -97,7 +107,7 @@ export const defaultTrackerOptions = {
   performance: false, // If want to collect performance data
   http: {
     fetch: true, // If listen request use fetch interface
-    ajax: true,  // If listen ajax request
+    ajax: true, // If listen ajax request
     ignoreRules: [] // If request url match rules, interceptor won't emit events. Support string and regexp
   },
   behavior: {
@@ -155,15 +165,15 @@ class ErrorBoundary extends React.Component {
 
 # Support events
 
-| EventName            | Description                                                             |
-| -------------------- | ----------------------------------------------------------------------- |
-| jsError              | winodw.onerror                                                          |
-| vuejsError           | Vue.config.errorHandler                                                 |
-| unhandleRejection    | window.onunhandledrejection                                             |
-| resourceError        | Resource request error                                                  |
-| reqError             | Network request error                                                   |
+| EventName            | Description                                                                                                                                                     |
+| -------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| jsError              | winodw.onerror                                                                                                                                                  |
+| vuejsError           | Vue.config.errorHandler                                                                                                                                         |
+| unhandleRejection    | window.onunhandledrejection                                                                                                                                     |
+| resourceError        | Resource request error                                                                                                                                          |
+| reqError             | Network request error                                                                                                                                           |
 | batchErrors          | Batch collection of error events, includes 'jsError', 'vuejsError', 'unHandleRejection', 'resourceError' and 'reqError' , trigger every specified time interval |
-| reqStart             | Network request start                                                   |
-| reqEnd               | Network request end                                                     |
-| performanceInfoReady | Performance data is ready                                               |
-| event                | Includes all events above                                               |
+| reqStart             | Network request start                                                                                                                                           |
+| reqEnd               | Network request end                                                                                                                                             |
+| performanceInfoReady | Performance data is ready                                                                                                                                       |
+| event                | Includes all events above                                                                                                                                       |

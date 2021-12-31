@@ -71,12 +71,22 @@ export interface IRrwebOption {
   delay: number;
 }
 
+export interface IHookBeforeSend {
+  (data: ErrorCombine, eventName: ErrorCombine["errorType"]): ErrorCombine;
+}
+export interface ReportOptions {
+  url: string;
+  method: string;
+  contentType: string;
+  beforeSend: IHookBeforeSend;
+}
+
 export interface ITrackerOptions {
   env: Env;
   error: IErrorOptions;
   http: IHttpOptions;
   data: IData;
-  reportUrl: string;
+  report: ReportOptions;
   performance: boolean;
   isSpa: boolean;
   behavior: IBehaviorOption;
@@ -97,7 +107,12 @@ export type IData = Record<string | number | symbol, unknown>;
 
 export const defaultTrackerOptions = {
   env: Env.Dev,
-  reportUrl: "",
+  report: {
+    url: "",
+    method: "POST",
+    contentType: "application/json",
+    beforeSend: (data: ErrorCombine) => data
+  },
   data: {},
   error: {
     watch: true,
@@ -241,7 +256,7 @@ export class Monitor {
    * Inject instances and init
    */
   initInstances(): void {
-    this.reporter = new Reporter(this.$options, this.$data);
+    this.reporter = new Reporter(this.$options);
 
     if (this.$options.error.watch) {
       this.errObserver = new ErrorObserver(this.$options);
@@ -378,7 +393,7 @@ export class Monitor {
     if (this.errorQueueTimer) return;
 
     this.errorQueueTimer = window.setTimeout(() => {
-      if (this.$options.reportUrl) {
+      if (this.$options.report.url) {
         this.reporter.reportErrors(this.errorQueue);
       }
 
