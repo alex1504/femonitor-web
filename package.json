@@ -25,11 +25,14 @@
   "scripts": {
     "clean": "shx rm -rf dist coverage .rpt2_cache",
     "watch": "cross-env NODE_ENV=development EXTERNAL=1 rollup -c --watch -f umd -o dist/index.umd.js",
-    "server": "nodemon --watch server --exec \"npx ts-node --project tsconfig.server.json ./server/app.ts\"",
     "build": "npm run lint && npm run clean && npm run build:esm && npm run build:umd && npm run build:min",
     "build:esm": "cross-env NODE_ENV=production EXTERNAL=1 rollup -c -f esm -o dist/index.js",
     "build:umd": "cross-env NODE_ENV=production rollup -c -f umd -o dist/index.umd.js",
     "build:min": "cross-env NODE_ENV=production MINIFY=1 rollup -c -f umd -o dist/index.min.js",
+    "server": "npm run server:dev",
+    "server:dev": "nodemon --watch server --exec \"npx ts-node --project tsconfig.server.json ./server/app.ts\"",
+    "server:compile": "tsc --project tsconfig.server.json",
+    "server:start": "npm run server:compile && node server/app.js",
     "lint": "eslint \"src/**/*\" \"test/**/*\"",
     "lint:fix": "eslint --fix \"src/**/*\" \"test/**/*\"",
     "test": "cross-env NODE_ENV=test jest"

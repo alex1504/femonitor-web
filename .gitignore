@@ -73,3 +73,6 @@ jspm_packages/
 
 # FuseBox cache
 .fusebox/
+
+# Test server js
+server/*.js
