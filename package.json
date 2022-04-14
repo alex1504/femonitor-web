@@ -1,6 +1,6 @@
 {
   "name": "femonitor-web",
-  "version": "1.4.2",
+  "version": "1.4.3",
   "description": "A web SDK for frontend error and performance monnitor",
   "author": {
     "name": "alex1504"

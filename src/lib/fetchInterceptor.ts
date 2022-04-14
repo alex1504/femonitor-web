@@ -53,7 +53,7 @@ export class FetchInterceptor extends BaseObserver {
                 requestUrl: res.url,
                 requestMethod: this._method,
                 requestData: this._data,
-                response: res.json(),
+                response: res,
                 duration: Date.now() - startTime,
                 context: this,
                 status

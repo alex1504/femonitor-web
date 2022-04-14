@@ -26,7 +26,7 @@ export enum TrackerEvents {
 export interface IReqEndRes {
   duration?: number;
   requestUrl?: string;
-  response?: string | Promise<string>;
+  response?: string | Response;
   context?: any;
   requestMethod?: string;
   requestData?: any;
